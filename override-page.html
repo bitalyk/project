@@ -1,0 +1,29 @@
+<!-- override-page.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Override Content</title>
+    <script>
+        function overridePageContent() {
+            // Open the target page in a new window/tab
+            const targetWindow = window.open('target-page.html');
+
+            // Wait for the target page to load completely
+            targetWindow.onload = function() {
+                // Override the content of the target page
+                targetWindow.document.body.innerHTML = `
+                    <h1>Content Overridden!</h1>
+                    <p>This is the new content that has replaced the original content.</p>
+                    <p>Feel free to modify this as needed.</p>
+                `;
+            };
+        }
+    </script>
+</head>
+<body>
+    <h1>Override Another Page's Content</h1>
+    <button onclick="overridePageContent()">Override and Open Target Page</button>
+</body>
+</html>
