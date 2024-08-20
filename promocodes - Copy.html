@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Promo Code Sender</title>
+</head>
+<body>
+    <h1>Send Promo Codes</h1>
+    <textarea id="promoCodes" rows="10" cols="50" placeholder="Enter promo codes here, one per line..."></textarea>
+    <br>
+    <button onclick="sendPromoCodes()">Send Promo Codes</button>
+
+    <script>
+        async function sendPromoCodes() {
+            const textarea = document.getElementById('promoCodes');
+            const promoCodes = textarea.value.trim().split('\n');
+            const url = 'https://api.hamsterkombatgame.io/clicker/apply-promo';
+            const token = '1724150568222UJVc9EiCn0BpubMlDad3XvlxpRnviXPwWMQoFihZRK9HAR9mywDmacEdls9AtsiW6468557091';
+            
+            for (const code of promoCodes) {
+                if (code.trim() === '') continue; // Skip empty lines
+                try {
+                    const response = await fetch(url, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${token}`
+                        },
+                        body: JSON.stringify({ promoCode: code.trim() })
+                    });
+                    
+                    if (response.ok) {
+                        console.log(`Successfully sent promo code: ${code}`);
+                    } else {
+                        console.error(`Failed to send promo code: ${code}`);
+                    }
+                } catch (error) {
+                    console.error(`Error sending promo code: ${code}`, error);
+                }
+            }
+        }
+    </script>
+</body>
+</html>

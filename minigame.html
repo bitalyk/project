@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Claim Minigame</title>
+</head>
+<body>
+    <h1>Claim Daily Keys Minigame</h1>
+    <button id="fetchAndClaim">Fetch User ID and Claim Keys</button>
+    <p><a href="general.html">Back to General Page</a></p>
+
+    <script>
+        document.getElementById('fetchAndClaim').addEventListener('click', function() {
+            // Define the API URLs
+            const syncUrl = 'https://api.hamsterkombatgame.io/clicker/sync';
+            const claimUrl = 'https://api.hamsterkombatgame.io/clicker/claim-daily-keys-minigame';
+
+            // Define the request options for the first POST request
+            const syncOptions = {
+                method: 'POST',
+                headers: {
+                    'Authorization': 'Bearer 17240930274397lCmMwyu8u223h5mwyqwi7YSCUUpGHsVZCJw6My5PjjarGk3YsAK0GyjYEmszxNg6370186409',
+                    'Content-Type': 'application/json'
+                }
+            };
+
+            // Make the first API request
+            fetch(syncUrl, syncOptions)
+                .then(response => response.json())
+                .then(data => {
+                    // Log the entire response to the console
+                    console.log('API Response:', data);
+
+                    // Extract the clickerUser.id from the response
+                    const userId = data.clickerUser ? data.clickerUser.id : 'No clickerUser found';
+                    console.log('Clicker User ID:', userId);
+
+                    // Create the cipher value for the second request and encode it in Base64
+                    const plainCipherValue = `0000000001|${userId}`;
+                    const encodedCipherValue = btoa(plainCipherValue); // Base64 encode the cipher value
+
+                    // Define the request options for the second POST request
+                    const claimOptions = {
+                        method: 'POST',
+                        headers: {
+                            'Authorization': 'Bearer 17240930274397lCmMwyu8u223h5mwyqwi7YSCUUpGHsVZCJw6My5PjjarGk3YsAK0GyjYEmszxNg6370186409',
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ cipher: encodedCipherValue })
+                    };
+
+                    // Make the second API request
+                    return fetch(claimUrl, claimOptions);
+                })
+                .then(response => response.json())
+                .then(claimData => {
+                    // Log the response from the claim request to the console
+                    console.log('Claim Response:', claimData);
+                })
+                .catch(error => {
+                    // Handle errors
+                    console.error('Error:', error);
+                });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Decode and Claim Cipher</title>
+</head>
+<body>
+    <h1>Decode and Claim Cipher Value</h1>
+    <button id="sendRequest">Get, Decode, and Claim Cipher</button>
+    <p><a href="general.html">Back to General Page</a></p>
+
+    <script>
+        document.getElementById('sendRequest').addEventListener('click', function() {
+            // First, get and decode the cipher value
+            const configUrl = 'https://api.hamsterkombatgame.io/clicker/config';
+
+            const options = {
+                method: 'POST',
+                headers: {
+                    'Authorization': 'Bearer 17240930274397lCmMwyu8u223h5mwyqwi7YSCUUpGHsVZCJw6My5PjjarGk3YsAK0GyjYEmszxNg6370186409',
+                    'Content-Type': 'application/json'
+                }
+            };
+
+            fetch(configUrl, options)
+                .then(response => response.json())
+                .then(data => {
+                    // Log the initial response
+                    console.log('Initial API Response:', data);
+
+                    // Extract and modify the cipher value
+                    let cipherValue = data.dailyCipher.cipher;
+                    cipherValue = cipherValue.slice(0, 3) + cipherValue.slice(4); // Remove 4th character
+                    const decodedValue = atob(cipherValue); // Decode from Base64
+
+                    // Log the decoded cipher value to the console
+                    console.log('Decoded Cipher Value:', decodedValue);
+
+                    // Now, send the decoded value in a new POST request
+                    const claimUrl = 'https://api.hamsterkombatgame.io/clicker/claim-daily-cipher';
+                    const claimBody = JSON.stringify({ cipher: decodedValue });
+
+                    fetch(claimUrl, {
+                        method: 'POST',
+                        headers: {
+                            'Authorization': 'Bearer 17240930274397lCmMwyu8u223h5mwyqwi7YSCUUpGHsVZCJw6My5PjjarGk3YsAK0GyjYEmszxNg6370186409',
+                            'Content-Type': 'application/json'
+                        },
+                        body: claimBody
+                    })
+                    .then(claimResponse => claimResponse.json())
+                    .then(claimData => {
+                        // Log the response from the claim request to the console
+                        console.log('Claim Response:', claimData);
+                    })
+                    .catch(error => {
+                        // Handle errors for the claim request
+                        console.error('Error during claim request:', error);
+                    });
+
+                })
+                .catch(error => {
+                    // Handle errors for the first request
+                    console.error('Error during config request:', error);
+                });
+        });
+    </script>
+</body>
+</html>
