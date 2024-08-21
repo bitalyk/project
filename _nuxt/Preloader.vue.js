@@ -1,0 +1,1 @@
+import{d as r,o as c,a as t,b as s,f as e,$ as o}from"./entry.PKrA3y6R.js";const _={class:"preloader"},n=["src"],a=["src"],l=["src"],u=r({__name:"Preloader",setup(i){return(d,m)=>(c(),t("div",_,[s("img",{src:e(o)},null,8,n),s("img",{src:e(o)},null,8,a),s("img",{src:e(o)},null,8,l)]))}});export{u as _};
