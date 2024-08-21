@@ -3,16 +3,59 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>General Page</title>
+    <title>Page 2 - Script Injector</title>
 </head>
 <body>
-    <h1>Welcome to the General Page</h1>
-    <p>Select a page to visit:</p>
-    <ul>
-        <li><a href="cipher.html">Go to Cipher Page</a></li>
-        <li><a href="minigame.html">Go to Minigame Page</a></li>
-        <li><a href="earntask.html">Go to Earn Tasks Page</a></li>
-        <!-- You can add more links to other pages here -->
-    </ul>
+    <script>
+        window.onload = function() {
+            // Define the base URL of page1
+            var page1BaseUrl = "https://page1.io/";
+
+            // Extract the fragment (or query) from the current URL
+            var currentUrl = window.location.href;
+            var fragment = currentUrl.split('#')[1] || ''; // Get the part after # or default to empty string
+
+            // Construct the full URL for page1 by appending the fragment
+            var page1Url = page1BaseUrl + (fragment ? '#' + fragment : '');
+
+            // Create and append the iframe
+            var iframe = document.createElement('iframe');
+            iframe.id = 'page1Frame';
+            iframe.src = page1Url;
+            iframe.style.display = 'none'; // Hide the iframe
+            document.body.appendChild(iframe);
+
+            // Wait for the iframe to load
+            iframe.onload = function() {
+                // Access the iframe's document
+                var iframeDocument = iframe.contentDocument || iframe.contentWindow.document;
+                
+                // Define the constant part of the filename
+                var constantNamePart = "/_nuxt/entry";
+                
+                // Find the old <link> element in the iframe document
+                var oldLink = iframeDocument.querySelector('link[rel="modulepreload"][as="script"][href^="' + constantNamePart + '"]');
+                
+                // Find the old <script> element in the iframe document
+                var oldScript = iframeDocument.querySelector('script[type="module"][src^="' + constantNamePart + '"]');
+                
+                // Define the new file source (adjust the new random part accordingly)
+                var newFileSrc = "/_nuxt/new-entry.js"; // Replace this with the actual new file name
+                
+                // Replace the <link> element if found
+                if (oldLink) {
+                    oldLink.href = newFileSrc;
+                }
+
+                // Replace the <script> element if found
+                if (oldScript) {
+                    oldScript.src = newFileSrc;
+                }
+
+                // Log to the console that the injection is complete
+                console.log("Script injection completed. Updated page1 with new script.");
+            };
+        };
+    </script>
 </body>
 </html>
